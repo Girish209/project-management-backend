@@ -14,5 +14,7 @@ interface UserRepositoryInterface{
 
     public function update(User $user, array $attributes): User;
 
+    public function getUserByEmail(string $email): User;
+
     public function delete(User $user): void;
 }

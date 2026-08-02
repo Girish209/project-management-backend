@@ -24,6 +24,10 @@ final class EloquentUserRepository implements UserRepositoryInterface{
         return $user->refresh();
     }
 
+    public function getUserByEmail(string $email): User{
+        return User::where('email', $email)->firstOrFail();
+    }
+
     public function delete(User $user): void{
         $user->delete();
     }

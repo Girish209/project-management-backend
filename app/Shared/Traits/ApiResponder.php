@@ -3,6 +3,7 @@
 namespace App\Shared\Traits;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 trait ApiResponder
 {
@@ -21,6 +22,26 @@ trait ApiResponder
         string $message = 'Success',
         int $status = 200
     ): JsonResponse {
+        if ($data instanceof JsonResource) {
+            $resourceData = $data->response()->getData(true);
+
+            $response = [
+                'success' => true,
+                'message' => $message,
+                'data' => $resourceData['data'],
+            ];
+
+            if (isset($resourceData['links'])) {
+                $response['links'] = $resourceData['links'];
+            }
+
+            if (isset($resourceData['meta'])) {
+                $response['meta'] = $resourceData['meta'];
+            }
+
+            return response()->json($response, $status);
+        }
+
         return response()->json([
             'success' => true,
             'message' => $message,
